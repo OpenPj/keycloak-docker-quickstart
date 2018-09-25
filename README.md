@@ -31,7 +31,7 @@ The final artifact for this module is a folder tree as the following:
 Main module that includes all the needed custom providers and authenticators.
 The default project contains only a single custom authenticator but you can easily add new providers following the same configuration approach.
 
-* Custom Authenticator
+**Custom Authenticator**
 This is the implementation of the secret question provider taken from the Keycloak examples folder.
 
 ## Keycloak Integration Tests
@@ -92,6 +92,7 @@ This module includes the default example of themes with the addition of the secr
 ## Deliverables
 
 **Overlays**
+
 | Source | Target deployment | Artifact |
 | -------- | -------- | -------- |
 | /src/main/resources/standalone/configuration/standalone.xml | /opt/jboss/keycloak/standalone/configuration/standalone.xml | XML |
