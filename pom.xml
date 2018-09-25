@@ -1,0 +1,203 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.keycloak</groupId>
+	<artifactId>keycloak-docker-quickstart</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Keycloak - SDK Docker Quickstart</name>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<maven.compiler.source>1.8</maven.compiler.source>
+		
+		<!-- Keycloak dependencies -->
+		<keycloak.version>4.0.0.Final</keycloak.version>
+		<resteasy.version>3.5.1.Final</resteasy.version>
+		<jboss.logging.version>3.3.1.Final</jboss.logging.version>
+		<wildfly.plugin.version>1.1.0.Final</wildfly.plugin.version>
+
+		<!-- Docker settings -->
+		<docker.keepRunning>true</docker.keepRunning>
+		<docker.keycloak.groupId>jboss</docker.keycloak.groupId>
+		<docker.keycloak.artifactId>keycloak</docker.keycloak.artifactId>
+		<docker.keycloak.image.name>keycloak</docker.keycloak.image.name>
+		<docker.keycloak.user>admin</docker.keycloak.user>
+		<docker.keycloak.password>admin</docker.keycloak.password>
+		<docker.keycloak.port.host>8080</docker.keycloak.port.host>
+		<docker.keycloak.port.internal>8080</docker.keycloak.port.internal>
+		<docker.keycloak.port.external>8080</docker.keycloak.port.external>
+		<docker.keycloak.time.test>120000</docker.keycloak.time.test>
+		<docker.keycloak.db.vendor>H2</docker.keycloak.db.vendor>
+
+		<!-- Docker logging -->
+		<docker.keycloak.showLogs>true</docker.keycloak.showLogs>
+		<docker.keycloak.logAll>true</docker.keycloak.logAll>
+		<docker.keycloak.verbose>false</docker.keycloak.verbose>
+
+		<!-- Docker Arguments -->
+		<docker.keycloak.run.cmd.arg.1>-b</docker.keycloak.run.cmd.arg.1>
+		<docker.keycloak.run.cmd.arg.2>0.0.0.0</docker.keycloak.run.cmd.arg.2>
+		<docker.keycloak.run.cmd.arg.3>-Dkeycloak.migration.action=import</docker.keycloak.run.cmd.arg.3>
+		<docker.keycloak.run.cmd.arg.4>-Dkeycloak.migration.provider=dir</docker.keycloak.run.cmd.arg.4>
+		<docker.keycloak.run.cmd.arg.5>-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config</docker.keycloak.run.cmd.arg.5>
+		<docker.keycloak.run.cmd.arg.6>-Dkeycloak.migration.strategy=OVERWRITE_EXISTING</docker.keycloak.run.cmd.arg.6>
+		<docker.keycloak.run.cmd.arg.7>-bmanagement</docker.keycloak.run.cmd.arg.7>
+		<docker.keycloak.run.cmd.arg.8>0.0.0.0</docker.keycloak.run.cmd.arg.8>
+
+
+		<!-- Docker Volumes Building -->
+		
+		<!-- Realm -->
+		<docker.keycloak.volume.internal.realm-config>/src/main/realm-config</docker.keycloak.volume.internal.realm-config>
+		<docker.keycloak.volume.external.realm-config>/opt/jboss/keycloak/realm-config</docker.keycloak.volume.external.realm-config>
+
+		<!-- WildFly configuration -->
+		<docker.keycloak.volume.internal.configuration.standalone>/src/main/resources/standalone/configuration/standalone.xml</docker.keycloak.volume.internal.configuration.standalone>
+		<docker.keycloak.volume.external.configuration.standalone>/opt/jboss/keycloak/standalone/configuration/standalone.xml</docker.keycloak.volume.external.configuration.standalone>
+
+		<!-- Keycloak Theme -->
+		<docker.keycloak.volume.internal.theme>/keycloak-theme/target/keycloak-theme-${project.version}.jar</docker.keycloak.volume.internal.theme>
+		<docker.keycloak.volume.external.theme>/opt/jboss/keycloak/standalone/deployments/keycloak-theme-${project.version}.jar</docker.keycloak.volume.external.theme>
+
+		<!-- Keycloak Identity Providers -->
+		<docker.keycloak.volume.internal.providers.authenticator.1>/keycloak-identity-providers/keycloak-identity-provider-authenticator/target/keycloak-identity-provider-authenticator-${project.version}.jar</docker.keycloak.volume.internal.providers.authenticator.1>
+		<docker.keycloak.volume.external.providers.authenticator.1>/opt/jboss/keycloak/standalone/deployments/keycloak-identity-provider-authenticator-${project.version}.jar</docker.keycloak.volume.external.providers.authenticator.1>
+
+		<!-- Docker - Binding volumes -->
+		<docker.keycloak.bind.volume.realm-config>${project.parent.basedir}${docker.keycloak.volume.internal.realm-config}:${docker.keycloak.volume.external.realm-config}</docker.keycloak.bind.volume.realm-config>
+		<docker.keycloak.bind.volume.configuration.standalone>${project.parent.basedir}${docker.keycloak.volume.internal.configuration.standalone}:${docker.keycloak.volume.external.configuration.standalone}</docker.keycloak.bind.volume.configuration.standalone>
+		<docker.keycloak.bind.volume.theme>${project.parent.basedir}${docker.keycloak.volume.internal.theme}:${docker.keycloak.volume.external.theme}</docker.keycloak.bind.volume.theme>
+		<docker.keycloak.bind.volume.providers.authenticator.1>${project.parent.basedir}${docker.keycloak.volume.internal.providers.authenticator.1}:${docker.keycloak.volume.external.providers.authenticator.1}</docker.keycloak.bind.volume.providers.authenticator.1>
+
+		<!-- Docker - Image saving options -->
+		<docker.keycloak.saveName>custom/keycloak:${project.version}</docker.keycloak.saveName>
+		<docker.keycloak.saveFile>custom-keycloak-server</docker.keycloak.saveFile>
+		<docker.keycloak.skipSave>false</docker.keycloak.skipSave>
+		
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.26.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+        			<version>1.8</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<inherited>false</inherited>
+						<id>filter-dockerfiles</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<!-- # Filtered Resources -->
+								<resource>
+									<directory>${project.basedir}/src/main/docker</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>Dockerfile</include>
+									</includes>
+								</resource>
+								<!-- # Unfiltered Resources -->
+								<resource>
+									<directory>${project.basedir}/src/main/docker</directory>
+									<filtering>false</filtering>
+									<excludes>
+										<exclude>Dockerfile</exclude>
+									</excludes>
+								</resource>
+							</resources>
+							<outputDirectory>${project.basedir}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<extensions>true</extensions>
+					<skip>false</skip>
+					<showLogs>${docker.keycloak.showLogs}</showLogs>
+					<logAll>${docker.keycloak.logAll}</logAll>
+					<verbose>${docker.keycloak.verbose}</verbose>
+					<skipSave>${docker.keycloak.skipSave}</skipSave>
+					<images>
+						<image>
+							<alias>custom-keycloak</alias>
+							<name>custom/keycloak:${project.version}</name>
+							<build>
+								<dockerFileDir>${project.basedir}</dockerFileDir>
+								<compression>gzip</compression>
+							</build>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<inherited>false</inherited>
+						<id>save</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+							<goal>save</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<modules>
+		<module>keycloak-theme</module>
+		<module>keycloak-identity-providers</module>
+		<module>keycloak-integration-tests</module>
+		<module>keycloak-assembly</module>
+	</modules>
+
+</project>

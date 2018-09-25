@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>keycloak-docker-quickstart</artifactId>
+		<groupId>org.keycloak</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>keycloak-integration-tests</artifactId>
+	<name>Keycloak - Integration Test Suite</name>
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<keepRunning>${docker.keepRunning}</keepRunning>
+					<skip>false</skip>
+					<showLogs>${docker.keycloak.showLogs}</showLogs>
+					<logAll>${docker.keycloak.logAll}</logAll>
+					<verbose>${docker.keycloak.verbose}</verbose>
+					<skipSave>${docker.keycloak.skipSave}</skipSave>
+					<images>
+						<image>
+							<name>jboss/keycloak:${keycloak.version}</name>
+							<run>
+								<ports>
+									<port>${docker.keycloak.port.external}:${docker.keycloak.port.internal}</port>
+								</ports>
+								<env>
+									<KEYCLOAK_USER>${docker.keycloak.user}</KEYCLOAK_USER>
+									<KEYCLOAK_PASSWORD>${docker.keycloak.password}</KEYCLOAK_PASSWORD>
+									<DB_VENDOR>${docker.keycloak.db.vendor}</DB_VENDOR>
+								</env>
+
+								<wait>
+									<http>
+										<url>http://${docker.host.address}:${docker.keycloak.port.external}</url>
+									</http>
+									<time>${docker.keycloak.time.test}</time>
+								</wait>
+
+								<cmd>
+									<arg>${docker.keycloak.run.cmd.arg.1}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.2}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.3}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.4}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.5}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.6}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.7}</arg>
+									<arg>${docker.keycloak.run.cmd.arg.8}</arg>
+								</cmd>
+
+								<volumes>
+									<bind>
+										<volume>${docker.keycloak.bind.volume.realm-config}</volume>
+										<volume>${docker.keycloak.bind.volume.configuration.standalone}</volume>
+										<volume>${docker.keycloak.bind.volume.theme}</volume>
+										<volume>${docker.keycloak.bind.volume.providers.authenticator.1}</volume>
+									</bind>
+								</volumes>
+							</run>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>stop</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
