@@ -1,5 +1,4 @@
 # Keycloak Docker Quickstart
-# 
 This project is aimed to manage Keycloak extensions using a fully Maven lifecycle.
 The current supported component are the following:
 
@@ -18,7 +17,6 @@ In order to use this project, you need to install the following components:
 
 
 ## Keycloak Assembly
-##
 This is the Maven assembly module for deploying the platform in any environment that is not currently supporting Docker.
 The final artifact for this module is a folder tree as the following:
 
@@ -27,7 +25,6 @@ The final artifact for this module is a folder tree as the following:
 * themes
 
 ## Keycloak Identity Providers
-## 
 Main module that includes all the needed custom providers and authenticators.
 The default project contains only a single custom authenticator but you can easily add new providers following the same configuration approach.
 
@@ -35,7 +32,6 @@ The default project contains only a single custom authenticator but you can easi
 This is the implementation of the secret question provider taken from the Keycloak examples folder.
 
 ## Keycloak Integration Tests
-## 
 This module will install and run all the artifacts using Docker.
 It can include also your own code for integration tests after executing your custom image.
 
@@ -59,7 +55,6 @@ Please consider that the default value is true, this means that you have to manu
 
 
 ## Saving and running the Custom Keycloak Docker image
-
 In order to execute the build process locally of the Docker image **custom/keycloak:latest**
 ```
 mvn clean package
@@ -86,7 +81,6 @@ docker run -p 8080:8080 custom/keycloak:latest
 ```
 
 ## Keycloak Themes
-## 
 This module includes the default example of themes with the addition of the secret question sample templates taken from the default authenticator.
 
 ## Deliverables
