@@ -14,10 +14,10 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		
 		<!-- Keycloak dependencies -->
-		<keycloak.version>4.0.0.Final</keycloak.version>
-		<resteasy.version>3.5.1.Final</resteasy.version>
+		<keycloak.version>4.5.0.Final</keycloak.version>
+		<resteasy.version>3.6.1.SP2</resteasy.version>
 		<jboss.logging.version>3.3.1.Final</jboss.logging.version>
-		<wildfly.plugin.version>1.1.0.Final</wildfly.plugin.version>
+		<wildfly.plugin.version>1.2.2.Final</wildfly.plugin.version>
 
 		<!-- Docker settings -->
 		<docker.keepRunning>true</docker.keepRunning>
