@@ -14,7 +14,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		
 		<!-- Keycloak dependencies -->
-		<keycloak.version>4.6.0.Final</keycloak.version>
+		<keycloak.version>4.7.0.Final</keycloak.version>
 		<resteasy.version>3.6.1.Final</resteasy.version>
 		<jboss.logging.version>3.3.2.Final</jboss.logging.version>
 		<wildfly.plugin.version>2.0.0.Final</wildfly.plugin.version>

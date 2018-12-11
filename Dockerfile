@@ -1,4 +1,4 @@
-FROM jboss/keycloak:4.6.0.Final
+FROM jboss/keycloak:4.7.0.Final
 
 ENV KEYCLOAK_USER admin
 ENV KEYCLOAK_PASSWORD admin
