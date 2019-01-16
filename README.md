@@ -7,12 +7,12 @@ The current supported component are the following:
 *  keycloak-integration-tests
 *  keycloak-theme
 
-Developed and tested on Keycloak 4.0.0.Final.
+Developed and tested on Keycloak 4.8.2.Final.
 
 ## Requirements
 In order to use this project, you need to install the following components:
 
-* Apache Maven 3.5.x
+* Apache Maven 3.6.x
 * Docker
 
 
