@@ -38,94 +38,129 @@ import java.util.Set;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class SecretQuestionCredentialProvider implements CredentialProvider, CredentialInputValidator, CredentialInputUpdater, OnUserCache {
-    public static final String SECRET_QUESTION = "SECRET_QUESTION";
-    public static final String CACHE_KEY = SecretQuestionCredentialProvider.class.getName() + "." + SECRET_QUESTION;
+public class SecretQuestionCredentialProvider
+		implements CredentialProvider<CredentialModel>, CredentialInputValidator, CredentialInputUpdater, OnUserCache {
+	public static final String SECRET_QUESTION = "SECRET_QUESTION";
+	public static final String CACHE_KEY = SecretQuestionCredentialProvider.class.getName() + "." + SECRET_QUESTION;
 
-    protected KeycloakSession session;
+	protected KeycloakSession session;
 
-    public SecretQuestionCredentialProvider(KeycloakSession session) {
-        this.session = session;
-    }
+	public SecretQuestionCredentialProvider(KeycloakSession session) {
+		this.session = session;
+	}
 
-    public CredentialModel getSecret(RealmModel realm, UserModel user) {
-        CredentialModel secret = null;
-        if (user instanceof CachedUserModel) {
-            CachedUserModel cached = (CachedUserModel)user;
-            secret = (CredentialModel)cached.getCachedWith().get(CACHE_KEY);
+	public CredentialModel getSecret(RealmModel realm, UserModel user) {
+		CredentialModel secret = null;
+		if (user instanceof CachedUserModel) {
+			CachedUserModel cached = (CachedUserModel) user;
+			secret = (CredentialModel) cached.getCachedWith().get(CACHE_KEY);
 
-        } else {
-            List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user, SECRET_QUESTION);
-            if (!creds.isEmpty()) secret = creds.get(0);
-        }
-        return secret;
-    }
+		} else {
+			List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user,
+					SECRET_QUESTION);
+			if (!creds.isEmpty())
+				secret = creds.get(0);
+		}
+		return secret;
+	}
 
+	@Override
+	public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
+		if (!SECRET_QUESTION.equals(input.getType()))
+			return false;
+		if (!(input instanceof UserCredentialModel))
+			return false;
+		UserCredentialModel credInput = (UserCredentialModel) input;
+		List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user,
+				SECRET_QUESTION);
+		if (creds.isEmpty()) {
+			CredentialModel secret = new CredentialModel();
+			secret.setType(SECRET_QUESTION);
+			secret.setSecretData(credInput.getChallengeResponse());
+			secret.setCreatedDate(Time.currentTimeMillis());
+			session.userCredentialManager().createCredential(realm, user, secret);
+		} else {
+			creds.get(0).setCredentialData(credInput.getChallengeResponse());
+			session.userCredentialManager().updateCredential(realm, user, creds.get(0));
+		}
+		session.userCache().evict(realm, user);
+		return true;
+	}
 
-    @Override
-    public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!SECRET_QUESTION.equals(input.getType())) return false;
-        if (!(input instanceof UserCredentialModel)) return false;
-        UserCredentialModel credInput = (UserCredentialModel) input;
-        List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user, SECRET_QUESTION);
-        if (creds.isEmpty()) {
-            CredentialModel secret = new CredentialModel();
-            secret.setType(SECRET_QUESTION);
-            secret.setValue(credInput.getValue());
-            secret.setCreatedDate(Time.currentTimeMillis());
-            session.userCredentialManager().createCredential(realm ,user, secret);
-        } else {
-            creds.get(0).setValue(credInput.getValue());
-            session.userCredentialManager().updateCredential(realm, user, creds.get(0));
-        }
-        session.userCache().evict(realm, user);
-        return true;
-    }
+	@Override
+	public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
+		if (!SECRET_QUESTION.equals(credentialType))
+			return;
+		session.userCredentialManager().disableCredentialType(realm, user, credentialType);
+		session.userCache().evict(realm, user);
 
-    @Override
-    public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
-        if (!SECRET_QUESTION.equals(credentialType)) return;
-        session.userCredentialManager().disableCredentialType(realm, user, credentialType);
-        session.userCache().evict(realm, user);
+	}
 
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
+		if (!session.userCredentialManager().getStoredCredentialsByType(realm, user, SECRET_QUESTION).isEmpty()) {
+			Set<String> set = new HashSet<>();
+			set.add(SECRET_QUESTION);
+			return set;
+		} else {
+			return Collections.EMPTY_SET;
+		}
 
-    @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-        if (!session.userCredentialManager().getStoredCredentialsByType(realm, user, SECRET_QUESTION).isEmpty()) {
-            Set<String> set = new HashSet<>();
-            set.add(SECRET_QUESTION);
-            return set;
-        } else {
-            return Collections.EMPTY_SET;
-        }
+	}
 
-    }
+	@Override
+	public boolean supportsCredentialType(String credentialType) {
+		return SECRET_QUESTION.equals(credentialType);
+	}
 
-    @Override
-    public boolean supportsCredentialType(String credentialType) {
-        return SECRET_QUESTION.equals(credentialType);
-    }
+	@Override
+	public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
+		if (!SECRET_QUESTION.equals(credentialType))
+			return false;
+		return getSecret(realm, user) != null;
+	}
 
-    @Override
-    public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
-        if (!SECRET_QUESTION.equals(credentialType)) return false;
-        return getSecret(realm, user) != null;
-    }
+	@Override
+	public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
+		if (!SECRET_QUESTION.equals(input.getType()))
+			return false;
+		if (!(input instanceof UserCredentialModel))
+			return false;
 
-    @Override
-    public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!SECRET_QUESTION.equals(input.getType())) return false;
-        if (!(input instanceof UserCredentialModel)) return false;
+		String secret = getSecret(realm, user).getSecretData();
 
-        String secret = getSecret(realm, user).getValue();
+		return secret != null && ((UserCredentialModel) input).getChallengeResponse().equals(secret);
+	}
 
-        return secret != null && ((UserCredentialModel)input).getValue().equals(secret);
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public void onCache(RealmModel realm, CachedUserModel user, UserModel delegate) {
+		List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user,
+				SECRET_QUESTION);
+		if (!creds.isEmpty())
+			user.getCachedWith().put(CACHE_KEY, creds.get(0));
+	}
 
-    @Override
-    public void onCache(RealmModel realm, CachedUserModel user, UserModel delegate) {
-        List<CredentialModel> creds = session.userCredentialManager().getStoredCredentialsByType(realm, user, SECRET_QUESTION);
-        if (!creds.isEmpty()) user.getCachedWith().put(CACHE_KEY, creds.get(0));
-    }
+	@Override
+	public String getType() {
+		return SECRET_QUESTION;
+	}
+
+	@Override
+	public CredentialModel createCredential(RealmModel realm, UserModel user, CredentialModel credentialModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteCredential(RealmModel realm, UserModel user, String credentialId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CredentialModel getCredentialFromModel(CredentialModel model) {
+		return model;
+	}
 }

@@ -28,32 +28,31 @@ import javax.ws.rs.core.Response;
  * @version $Revision: 1 $
  */
 public class SecretQuestionRequiredAction implements RequiredActionProvider {
-    public static final String PROVIDER_ID = "secret_question_config";
+	public static final String PROVIDER_ID = "secret_question_config";
 
-    @Override
-    public void evaluateTriggers(RequiredActionContext context) {
+	@Override
+	public void evaluateTriggers(RequiredActionContext context) {
 
-    }
+	}
 
-    @Override
-    public void requiredActionChallenge(RequiredActionContext context) {
-        Response challenge = context.form().createForm("secret-question-config.ftl");
-        context.challenge(challenge);
+	@Override
+	public void requiredActionChallenge(RequiredActionContext context) {
+		Response challenge = context.form().createForm("secret-question-config.ftl");
+		context.challenge(challenge);
 
-    }
+	}
 
-    @Override
-    public void processAction(RequiredActionContext context) {
-        String answer = (context.getHttpRequest().getDecodedFormParameters().getFirst("secret_answer"));
-        UserCredentialModel input = new UserCredentialModel();
-        input.setType(SecretQuestionCredentialProvider.SECRET_QUESTION);
-        input.setValue(answer);
-        context.getSession().userCredentialManager().updateCredential(context.getRealm(), context.getUser(), input);
-        context.success();
-    }
+	@Override
+	public void processAction(RequiredActionContext context) {
+		String answer = (context.getHttpRequest().getDecodedFormParameters().getFirst("secret_answer"));
+		UserCredentialModel input = new UserCredentialModel("", SecretQuestionCredentialProvider.SECRET_QUESTION,
+				answer);
+		context.getSession().userCredentialManager().updateCredential(context.getRealm(), context.getUser(), input);
+		context.success();
+	}
 
-    @Override
-    public void close() {
+	@Override
+	public void close() {
 
-    }
+	}
 }
