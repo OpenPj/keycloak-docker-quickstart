@@ -16,7 +16,7 @@
 		
 		<!-- Keycloak dependencies -->
 		<keycloak.version>8.0.1</keycloak.version>
-		<jboss.logging.version>3.3.2.Final</jboss.logging.version>
+		<jboss.logging.version>3.4.1.Final</jboss.logging.version>
 		<wildfly.plugin.version>2.0.2.Final</wildfly.plugin.version>
 
 		<!-- Docker settings -->
