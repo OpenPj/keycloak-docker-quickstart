@@ -2,6 +2,7 @@
 # Project Specific
 ######################
 /src/test/javascript/coverage/
+/Dockerfile
 
 ######################
 # Node
