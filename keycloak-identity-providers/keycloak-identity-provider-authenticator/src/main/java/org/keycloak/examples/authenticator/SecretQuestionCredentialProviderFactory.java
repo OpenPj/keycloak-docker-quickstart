@@ -16,6 +16,7 @@
  */
 package org.keycloak.examples.authenticator;
 
+import org.keycloak.credential.CredentialModel;
 import org.keycloak.credential.CredentialProvider;
 import org.keycloak.credential.CredentialProviderFactory;
 import org.keycloak.models.KeycloakSession;
@@ -24,14 +25,15 @@ import org.keycloak.models.KeycloakSession;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class SecretQuestionCredentialProviderFactory implements CredentialProviderFactory<SecretQuestionCredentialProvider> {
-    @Override
-    public String getId() {
-        return "secret-question";
-    }
+public class SecretQuestionCredentialProviderFactory
+		implements CredentialProviderFactory<SecretQuestionCredentialProvider> {
+	@Override
+	public String getId() {
+		return "secret-question";
+	}
 
-    @Override
-    public CredentialProvider create(KeycloakSession session) {
-        return new SecretQuestionCredentialProvider(session);
-    }
+	@Override
+	public CredentialProvider<CredentialModel> create(KeycloakSession session) {
+		return new SecretQuestionCredentialProvider(session);
+	}
 }
