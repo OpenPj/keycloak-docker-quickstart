@@ -38,7 +38,7 @@
 
 								<wait>
 									<http>
-										<url>http://${docker.host.address}:${docker.keycloak.port.external}</url>
+										<url>http://${docker.host.address}:${docker.keycloak.port.test}</url>
 									</http>
 									<time>${docker.keycloak.time.test}</time>
 								</wait>
