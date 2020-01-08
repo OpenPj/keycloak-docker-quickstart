@@ -11,6 +11,7 @@ COPY ${docker.keycloak.volume.internal.configuration.standalone} ${docker.keyclo
 COPY ${docker.keycloak.volume.internal.providers.authenticator.1} ${docker.keycloak.volume.external.providers.authenticator.1}
 COPY ${docker.keycloak.volume.internal.theme} ${docker.keycloak.volume.external.theme}
 
+EXPOSE ${docker.keycloak.port.internal}
 EXPOSE ${docker.keycloak.port.external}
 
 CMD ["${docker.keycloak.run.cmd.arg.1}", "${docker.keycloak.run.cmd.arg.2}", "${docker.keycloak.run.cmd.arg.3}", "${docker.keycloak.run.cmd.arg.4}", "${docker.keycloak.run.cmd.arg.5}", "${docker.keycloak.run.cmd.arg.6}","${docker.keycloak.run.cmd.arg.7}","${docker.keycloak.run.cmd.arg.8}"]
