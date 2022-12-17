@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.keycloak</groupId>
 	<artifactId>keycloak-docker-quickstart</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>Keycloak - SDK Docker Quickstart</name>
 	<packaging>pom</packaging>
 
@@ -11,17 +11,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>19</maven.compiler.source>
+		<maven.compiler.target>19</maven.compiler.target>
 		
 		<!-- Keycloak dependencies -->
-		<keycloak.version>8.0.1</keycloak.version>
-		<jboss.logging.version>3.4.1.Final</jboss.logging.version>
-		<wildfly.plugin.version>2.0.2.Final</wildfly.plugin.version>
+		<keycloak.version>20.0.1</keycloak.version>
 
 		<!-- Docker settings -->
 		<docker.keepRunning>true</docker.keepRunning>
-		<docker.keycloak.groupId>jboss</docker.keycloak.groupId>
+		<docker.keycloak.groupId>quay.io/keycloak</docker.keycloak.groupId>
 		<docker.keycloak.artifactId>keycloak</docker.keycloak.artifactId>
 		<docker.keycloak.image.name>keycloak</docker.keycloak.image.name>
 		<docker.keycloak.user>admin</docker.keycloak.user>
@@ -84,12 +82,12 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.4.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.3.0</version>
 					<configuration>
 						<encoding>UTF-8</encoding>
 					</configuration>
@@ -97,17 +95,17 @@
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.31.0</version>
+					<version>0.40.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.1.1</version>
+					<version>3.4.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
-        			<version>1.8</version>
+        			<version>3.1.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -151,7 +149,6 @@
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<configuration>
-					<extensions>true</extensions>
 					<skip>false</skip>
 					<showLogs>${docker.keycloak.showLogs}</showLogs>
 					<logAll>${docker.keycloak.logAll}</logAll>

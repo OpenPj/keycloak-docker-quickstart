@@ -17,11 +17,11 @@
 
 package org.keycloak.examples.authenticator;
 
+import javax.ws.rs.core.Response;
+
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.models.UserCredentialModel;
-
-import javax.ws.rs.core.Response;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -47,7 +47,7 @@ public class SecretQuestionRequiredAction implements RequiredActionProvider {
 		String answer = (context.getHttpRequest().getDecodedFormParameters().getFirst("secret_answer"));
 		UserCredentialModel input = new UserCredentialModel("", SecretQuestionCredentialProvider.SECRET_QUESTION,
 				answer);
-		context.getSession().userCredentialManager().updateCredential(context.getRealm(), context.getUser(), input);
+		context.getUser().credentialManager().updateCredential(input);
 		context.success();
 	}
 
