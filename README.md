@@ -68,7 +68,7 @@ http://localhost:8080/auth/admin
 
 A quickstart realm is provided to test your extensions.
 
-To dinamically regenerate the Dockerfile and build only the Docker image:
+To dynamically regenerate the Dockerfile and build only the Docker image:
 ```
 mvn clean package
 docker build -t custom/keycloak:${project.version} .
