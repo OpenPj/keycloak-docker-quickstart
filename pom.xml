@@ -11,11 +11,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
-		<maven.compiler.source>19</maven.compiler.source>
-		<maven.compiler.target>19</maven.compiler.target>
+		<maven.compiler.source>18</maven.compiler.source>
+		<maven.compiler.target>18</maven.compiler.target>
 		
 		<!-- Keycloak dependencies -->
-		<keycloak.version>20.0.1</keycloak.version>
+		<keycloak.version>20.0.2</keycloak.version>
 
 		<!-- Docker settings -->
 		<docker.keepRunning>true</docker.keepRunning>

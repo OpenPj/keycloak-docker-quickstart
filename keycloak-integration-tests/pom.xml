@@ -31,7 +31,7 @@
 									<port>${docker.keycloak.port.external}:${docker.keycloak.port.internal}</port>
 								</ports>
 								<env>
-									<KEYCLOAK_ADMIN_USER>${docker.keycloak.user}</KEYCLOAK_ADMIN_USER>
+									<KEYCLOAK_ADMIN>${docker.keycloak.user}</KEYCLOAK_ADMIN>
 									<KEYCLOAK_ADMIN_PASSWORD>${docker.keycloak.password}</KEYCLOAK_ADMIN_PASSWORD>
 								</env>
 
