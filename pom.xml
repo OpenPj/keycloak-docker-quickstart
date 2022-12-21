@@ -111,9 +111,8 @@
 	<modules>
 		<module>keycloak-theme</module>
 		<module>keycloak-identity-providers</module>
-		<module>keycloak-docker</module>
-		<module>keycloak-integration-tests</module>
 		<module>keycloak-assembly</module>
+		<module>keycloak-integration-tests</module>
 	</modules>
 
 </project>
