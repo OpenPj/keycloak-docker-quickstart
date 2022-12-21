@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>keycloak-docker-quickstart</artifactId>
+		<groupId>org.keycloak</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.keycloak</groupId>
+	<artifactId>keycloak-docker</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>Keycloak - Docker</name>
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<inherited>false</inherited>
+						<id>filter-dockerfiles</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<resources>
+								<!-- # Filtered Resources -->
+								<resource>
+									<directory>${project.basedir}/src/main/docker</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>Dockerfile</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${project.basedir}/src/main</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>realm-config/**</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<filtering>false</filtering>
+								</resource>
+								<!-- # Unfiltered Resources -->
+								<resource>
+									<directory>${project.parent.basedir}/keycloak-theme/target</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>*${project.version}.jar</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${project.parent.basedir}/keycloak-identity-providers/keycloak-identity-provider-authenticator/target</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>*${project.version}.jar</include>
+									</includes>
+								</resource>
+							</resources>
+							<outputDirectory>${project.build.directory}/dockertmp</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+					<showLogs>${docker.keycloak.showLogs}</showLogs>
+					<logAll>${docker.keycloak.logAll}</logAll>
+					<verbose>${docker.keycloak.verbose}</verbose>
+					<skipSave>${docker.keycloak.skipSave}</skipSave>
+					<images>
+						<image>
+							<alias>custom-keycloak</alias>
+							<name>custom/keycloak:${project.version}</name>
+							<build>
+								<dockerFileDir>${project.build.directory}/dockertmp</dockerFileDir>
+								<compression>gzip</compression>
+							</build>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<inherited>false</inherited>
+						<id>save</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+							<goal>save</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
