@@ -21,7 +21,6 @@ This is the Maven assembly module for deploying the platform in any environment 
 The final artifact for this module is a folder tree as the following:
 
 * realm-config
-* standalone
 * themes
 
 ## Keycloak Identity Providers
@@ -63,7 +62,7 @@ mvn install
 
 After the startup of Keycloak, you can access as admin/admin from the admin console URL:
 ```
-http://localhost:8080/auth/admin
+http://localhost:8080
 ```
 
 A quickstart realm is provided to test your extensions.
@@ -77,7 +76,7 @@ docker build -t custom/keycloak:${project.version} .
 Run the latest Docker image:
 
 ```
-docker run -p 8080:8080 custom/keycloak:latest
+docker run -p 8080:8080 custom/keycloak:${project.version}
 ```
 
 ## Keycloak Themes
@@ -89,10 +88,9 @@ This module includes the default example of themes with the addition of the secr
 
 | Source | Target deployment | Artifact |
 | -------- | -------- | -------- |
-| /src/main/resources/standalone/configuration/standalone.xml | /opt/jboss/keycloak/standalone/configuration/standalone.xml | XML |
-| /src/main/realm-config | /opt/jboss/keycloak/realm-config | Folder |
-| /keycloak-theme/target/keycloak-theme-${project.version}.jar | /opt/jboss/keycloak/standalone/deployments | JAR |
-| /keycloak-identity-providers/keycloak-identity-provider-authenticator/target/keycloak-identity-provider-authenticator-${project.version}.jar | /opt/jboss/keycloak/standalone/deployments | JAR |
+| /src/main/realm-config | /opt/keycloak/data/import | Folder |
+| /keycloak-theme/target/keycloak-theme-${project.version}.jar | /opt/keycloak/themes | JAR |
+| /keycloak-identity-providers/keycloak-identity-provider-authenticator/target/keycloak-identity-provider-authenticator-${project.version}.jar | /opt/keycloak/providers | JAR |
 
 **Docker image**
 The Docker image is written inside your local repo but it is also available in the following path:

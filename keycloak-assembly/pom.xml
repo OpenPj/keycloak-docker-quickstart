@@ -41,10 +41,6 @@
 										<include>realm-config/**</include>
 									</includes>
 								</resource>
-								<resource>
-									<directory>${project.basedir}/src/main/resources</directory>
-									<filtering>false</filtering>
-								</resource>
 								<!-- # Unfiltered Resources -->
 								<resource>
 									<directory>${project.parent.basedir}/keycloak-theme/target</directory>
