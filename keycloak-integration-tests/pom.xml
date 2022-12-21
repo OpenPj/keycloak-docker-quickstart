@@ -31,9 +31,8 @@
 									<port>${docker.keycloak.port.external}:${docker.keycloak.port.internal}</port>
 								</ports>
 								<env>
-									<KEYCLOAK_USER>${docker.keycloak.user}</KEYCLOAK_USER>
-									<KEYCLOAK_PASSWORD>${docker.keycloak.password}</KEYCLOAK_PASSWORD>
-									<DB_VENDOR>${docker.keycloak.db.vendor}</DB_VENDOR>
+									<KEYCLOAK_ADMIN_USER>${docker.keycloak.user}</KEYCLOAK_ADMIN_USER>
+									<KEYCLOAK_ADMIN_PASSWORD>${docker.keycloak.password}</KEYCLOAK_ADMIN_PASSWORD>
 								</env>
 
 								<wait>
@@ -46,18 +45,11 @@
 								<cmd>
 									<arg>${docker.keycloak.run.cmd.arg.1}</arg>
 									<arg>${docker.keycloak.run.cmd.arg.2}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.3}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.4}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.5}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.6}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.7}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.8}</arg>
 								</cmd>
 
 								<volumes>
 									<bind>
 										<volume>${docker.keycloak.bind.volume.realm-config}</volume>
-										<volume>${docker.keycloak.bind.volume.configuration.standalone}</volume>
 										<volume>${docker.keycloak.bind.volume.theme}</volume>
 										<volume>${docker.keycloak.bind.volume.providers.authenticator.1}</volume>
 									</bind>
