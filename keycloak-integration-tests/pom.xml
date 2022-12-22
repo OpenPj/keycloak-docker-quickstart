@@ -25,11 +25,10 @@
 					<skipSave>${docker.keycloak.skipSave}</skipSave>
 					<images>
 						<image>
-							<name>${docker.keycloak.groupId}</name>
+							<name>${docker.keycloak.groupId}/keycloak:${keycloak.version}</name>
 							<run>
 								<ports>
 									<port>${docker.keycloak.port.external}:${docker.keycloak.port.internal}</port>
-									<port>${docker.keycloak.port.debug.external}:${docker.keycloak.port.debug.internal}</port>
 								</ports>
 								<env>
 									<KEYCLOAK_ADMIN>${docker.keycloak.user}</KEYCLOAK_ADMIN>
