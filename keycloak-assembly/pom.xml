@@ -74,7 +74,7 @@
 					<images>
 						<image>
 							<alias>custom-keycloak</alias>
-							<name>custom/keycloak:${project.version}</name>
+							<name>${docker.keycloak.saveName}</name>
 							<build>
 								<dockerFileDir>${project.build.directory}/dockertmp</dockerFileDir>
 								<compression>gzip</compression>
