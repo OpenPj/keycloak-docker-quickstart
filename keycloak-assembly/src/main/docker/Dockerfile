@@ -9,6 +9,5 @@ COPY ${docker.keycloak.volume.internal.providers.authenticator.1} ${docker.keycl
 COPY ${docker.keycloak.volume.internal.theme} ${docker.keycloak.volume.external.theme}
 
 EXPOSE ${docker.keycloak.port.internal}
-EXPOSE ${docker.keycloak.port.external}
 
 CMD ["${docker.keycloak.run.cmd.arg.1}", "${docker.keycloak.run.cmd.arg.2}"]
