@@ -76,7 +76,7 @@ docker build -t custom/keycloak:${project.version} .
 Run the latest Docker image:
 
 ```
-docker run -p 8080:8080 custom/keycloak:${project.version}
+docker run -p 8080:8080 -p 9090:9090 custom/keycloak:${project.version}
 ```
 
 ## Keycloak Themes

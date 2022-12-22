@@ -27,6 +27,8 @@
 		<docker.keycloak.port.test>8080</docker.keycloak.port.test>
 		<docker.keycloak.port.internal>8080</docker.keycloak.port.internal>
 		<docker.keycloak.port.external>8080</docker.keycloak.port.external>
+		<docker.keycloak.port.debug.internal>9090</docker.keycloak.port.debug.internal>
+		<docker.keycloak.port.debug.external>9090</docker.keycloak.port.debug.external>
 		<docker.keycloak.time.test>120000</docker.keycloak.time.test>
 
 		<!-- Docker logging -->
