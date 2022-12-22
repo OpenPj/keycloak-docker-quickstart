@@ -49,7 +49,7 @@
 
 		<!-- Keycloak Theme -->
 		<docker.keycloak.volume.internal.theme>/keycloak-theme-${project.version}.jar</docker.keycloak.volume.internal.theme>
-		<docker.keycloak.volume.external.theme>/opt/keycloak/themes/keycloak-theme-${project.version}.jar</docker.keycloak.volume.external.theme>
+		<docker.keycloak.volume.external.theme>/opt/keycloak/providers/keycloak-theme-${project.version}.jar</docker.keycloak.volume.external.theme>
 
 		<!-- Keycloak Identity Providers -->
 		<docker.keycloak.volume.internal.providers.authenticator.1>/keycloak-identity-provider-authenticator-${project.version}.jar</docker.keycloak.volume.internal.providers.authenticator.1>
