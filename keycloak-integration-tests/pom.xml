@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>keycloak-docker-quickstart</artifactId>
 		<groupId>org.keycloak</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -25,20 +25,19 @@
 					<skipSave>${docker.keycloak.skipSave}</skipSave>
 					<images>
 						<image>
-							<name>jboss/keycloak:${keycloak.version}</name>
+							<name>${docker.keycloak.groupId}/keycloak:${keycloak.version}</name>
 							<run>
 								<ports>
 									<port>${docker.keycloak.port.external}:${docker.keycloak.port.internal}</port>
 								</ports>
 								<env>
-									<KEYCLOAK_USER>${docker.keycloak.user}</KEYCLOAK_USER>
-									<KEYCLOAK_PASSWORD>${docker.keycloak.password}</KEYCLOAK_PASSWORD>
-									<DB_VENDOR>${docker.keycloak.db.vendor}</DB_VENDOR>
+									<KEYCLOAK_ADMIN>${docker.keycloak.user}</KEYCLOAK_ADMIN>
+									<KEYCLOAK_ADMIN_PASSWORD>${docker.keycloak.password}</KEYCLOAK_ADMIN_PASSWORD>
 								</env>
 
 								<wait>
 									<http>
-										<url>http://${docker.host.address}:${docker.keycloak.port.external}</url>
+										<url>http://${docker.host.address}:${docker.keycloak.port.test}</url>
 									</http>
 									<time>${docker.keycloak.time.test}</time>
 								</wait>
@@ -46,18 +45,11 @@
 								<cmd>
 									<arg>${docker.keycloak.run.cmd.arg.1}</arg>
 									<arg>${docker.keycloak.run.cmd.arg.2}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.3}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.4}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.5}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.6}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.7}</arg>
-									<arg>${docker.keycloak.run.cmd.arg.8}</arg>
 								</cmd>
 
 								<volumes>
 									<bind>
 										<volume>${docker.keycloak.bind.volume.realm-config}</volume>
-										<volume>${docker.keycloak.bind.volume.configuration.standalone}</volume>
 										<volume>${docker.keycloak.bind.volume.theme}</volume>
 										<volume>${docker.keycloak.bind.volume.providers.authenticator.1}</volume>
 									</bind>

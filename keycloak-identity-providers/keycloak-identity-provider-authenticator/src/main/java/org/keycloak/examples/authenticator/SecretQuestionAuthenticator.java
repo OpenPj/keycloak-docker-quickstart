@@ -17,6 +17,15 @@
 
 package org.keycloak.examples.authenticator;
 
+import static org.keycloak.common.util.ServerCookie.SameSiteAttributeValue.NONE;
+
+import java.net.URI;
+
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+
 import org.jboss.resteasy.spi.HttpResponse;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.authentication.AuthenticationFlowContext;
@@ -28,12 +37,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
-
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import java.net.URI;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -92,9 +95,10 @@ public class SecretQuestionAuthenticator implements Authenticator {
 
 	public static void addCookie(String name, String value, String path, String domain, String comment, int maxAge,
 			boolean secure, boolean httpOnly) {
-		HttpResponse response = ResteasyProviderFactory.getContextData(HttpResponse.class);
+		HttpResponse response = ResteasyProviderFactory.peekInstance().getContextData(HttpResponse.class);
 		StringBuffer cookieBuf = new StringBuffer();
-		ServerCookie.appendCookieValue(cookieBuf, 1, name, value, path, domain, comment, maxAge, secure, httpOnly);
+		ServerCookie.appendCookieValue(cookieBuf, 1, name, value, path, domain, comment, maxAge, secure, httpOnly,
+				NONE);
 		String cookie = cookieBuf.toString();
 		response.getOutputHeaders().add(HttpHeaders.SET_COOKIE, cookie);
 	}
@@ -104,7 +108,7 @@ public class SecretQuestionAuthenticator implements Authenticator {
 		String secret = formData.getFirst("secret_answer");
 		UserCredentialModel input = new UserCredentialModel("", SecretQuestionCredentialProvider.SECRET_QUESTION,
 				secret);
-		return context.getSession().userCredentialManager().isValid(context.getRealm(), context.getUser(), input);
+		return context.getUser().credentialManager().isValid(input);
 	}
 
 	@Override
@@ -114,8 +118,7 @@ public class SecretQuestionAuthenticator implements Authenticator {
 
 	@Override
 	public boolean configuredFor(KeycloakSession session, RealmModel realm, UserModel user) {
-		return session.userCredentialManager().isConfiguredFor(realm, user,
-				SecretQuestionCredentialProvider.SECRET_QUESTION);
+		return user.credentialManager().isConfiguredFor(SecretQuestionCredentialProvider.SECRET_QUESTION);
 	}
 
 	@Override
